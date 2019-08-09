@@ -1,0 +1,14 @@
+os: Visual Studio 2019
+
+build_script:
+ - cmd: dotnet tool install --global paket
+ - cmd: dotnet restore FunctionalCuid.sln
+ - cmd: dotnet build -v n FunctionalCuid.sln
+ - cmd: dotnet pack FunctionalCuid\FunctionalCuid.fsproj -o %CD%\artifacts\nupkg
+ 
+artifacts:
+ - path: artifacts\nupkg\*.nupkg 
+
+test_script:
+ - cmd: cd FunctionalCuid.Tests
+ - cmd: dotnet run
