@@ -3,12 +3,15 @@ os: Visual Studio 2019
 build_script:
  - cmd: dotnet tool install --global paket
  - cmd: dotnet restore FunctionalCuid.sln
- - cmd: dotnet build -v n FunctionalCuid.sln
+ - cmd: dotnet build -v n --configuration Release FunctionalCuid\FunctionalCuid.fsproj
+ - cmd: dotnet build -v n FunctionalCuid\FunctionalCuid.Tests.fsproj
  - cmd: dotnet pack FunctionalCuid\FunctionalCuid.fsproj -o %CD%\artifacts\nupkg
  
 artifacts:
  - path: artifacts\nupkg\*.nupkg 
 
 test_script:
- - cmd: cd FunctionalCuid.Tests
- - cmd: dotnet run
+ - ps: cd FunctionalCuid.Tests
+ - ps: dotnet run
+ - ps: $wc = New-Object 'System.Net.WebClient'
+ - ps: $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\TestResults.xml))
