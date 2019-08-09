@@ -8,7 +8,9 @@ The best answer to that question can be found on [the README from the author](ht
 
 ## Installing
 
-(nuget link here)
+[![Nuget](https://img.shields.io/nuget/v/FunctionalCuid?logo=nuget&style=flat)](https://www.nuget.org/packages/FunctionalCuid/ "View on NuGet")
+
+`dotnet add package FunctionalCuid` will add the package to a project. If you use Paket, add `nuget FunctionalCuid` to `paket.dependencies` and add `FunctionalCuid` to `paket.references` in the project(s) where it is needed.
 
 ## Usage
 
