@@ -4,8 +4,8 @@ build_script:
  - cmd: dotnet tool install --global paket
  - cmd: dotnet restore FunctionalCuid.sln
  - cmd: dotnet build -v n --configuration Release FunctionalCuid\FunctionalCuid.fsproj
- - cmd: dotnet build -v n FunctionalCuid\FunctionalCuid.Tests.fsproj
- - cmd: dotnet pack FunctionalCuid.Tests\FunctionalCuid.fsproj -o %CD%\artifacts\nupkg
+ - cmd: dotnet build -v n FunctionalCuid.Tests\FunctionalCuid.Tests.fsproj
+ - cmd: dotnet pack FunctionalCuid\FunctionalCuid.fsproj -o %CD%\artifacts\nupkg
  
 artifacts:
  - path: artifacts\nupkg\*.nupkg 
