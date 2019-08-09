@@ -102,6 +102,12 @@ module private Support =
     match chars with
     | _ when chars > str.Length -> str
     | _ -> str.[str.Length - chars..]
+  
+  /// Convert a result to a boolean
+  let resultToBool x = match x with Ok _ -> true | Error _ -> false
+
+  /// Get the error message for a result with a string error message
+  let errMsg x = match x with Ok _ -> "" | Error msg -> msg
 
 
 /// Public functions for the CUID type
@@ -135,8 +141,7 @@ module Cuid =
   /// - be 25 characters long
   /// - start with "c"
   /// - be base-36 format ([0-9|a-z])
-  // TODO: extract these validations out so we can provide a "validate" function for C#/VB.NET
-  let fromString (x : string) =
+  let ofString (x : string) =
     match x with
     | null -> Error "string was null"
     | _ when x.Length <> 25 -> (sprintf "string was not 25 characters (length %i)" >> Error) x.Length
@@ -146,6 +151,14 @@ module Cuid =
 
   /// Get the string representation of a CUID
   let toString x = match x with Cuid y -> y
+
+  /// Is the string a valid CUID?
+  [<CompiledName "IsValid">]
+  let isValid = ofString >> resultToBool
+
+  /// Get the validation message for a CUID string
+  [<CompiledName "ValidationMessage">]
+  let validationMessage = ofString >> errMsg
 
   /// Generate a CUID as a string
   [<CompiledName "GenerateString">]
@@ -177,8 +190,7 @@ module Slug =
   /// Create a Slug from a string
   ///
   /// The string must be between 7 and 10 characters long and base-36 format ([0-9|a-z])
-  // TODO: extract these validations out so we can provide a "validate" function for C#/VB.NET
-  let fromString (x : string) =
+  let ofString (x : string) =
     match x with
     | null -> Error "string was null"
     | _ when x.Length < 7 -> (sprintf "string must be at least 7 characters (length %i)" >> Error) x.Length
@@ -188,6 +200,14 @@ module Slug =
 
   /// Get the string representation of a Slug
   let toString x = match x with Slug y -> y
+
+  /// Is the string a valid Slug?
+  [<CompiledName "IsValid">]
+  let isValid = ofString >> resultToBool
+
+  /// Get the validation message for a Slug string
+  [<CompiledName "ValidationMessage">]
+  let validationMessage = ofString >> errMsg
 
   /// Generate a Slug as a string
   [<CompiledName "GenerateString">]

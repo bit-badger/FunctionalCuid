@@ -15,29 +15,36 @@ module CuidTests =
       ]
   
   [<Tests>]
-  let fromStringTests =
-    testList "Cuid.fromString" [
+  let ofStringTests =
+    testList "Cuid.ofString" [
       test "fails when string is null" {
-        let x = Cuid.fromString null
+        let x = Cuid.ofString null
         Expect.isError x "Parsing should have returned an error"
         let msg = match x with Error y -> y | _ -> ""
         Expect.equal msg "string was null" "Expected error message not returned"
         }
       test "fails when string is not 25 characters" {
-        let x = Cuid.fromString "c12345566677893508"
+        let x = Cuid.ofString "c12345566677893508"
         Expect.isError x "Parsing should have returned an error"
         let msg = match x with Error y -> y | _ -> ""
         Expect.equal msg "string was not 25 characters (length 18)" "Expected error message not returned"
         }
       test "fails when string does not start with c" {
-        let x = Cuid.fromString "djld2cyuq0000t3rmniod1foy"
+        let x = Cuid.ofString "djld2cyuq0000t3rmniod1foy"
         Expect.isError x "Parsing should have returned an error"
         let msg = match x with Error y -> y | _ -> ""
         Expect.equal msg """string did not start with "c" ("djld2cyuq0000t3rmniod1foy")"""
           "Expected error message not returned"
         }
+      test "fails when string is not valid base-36" {
+        let x = Cuid.ofString "cjld2*yuq0/00t3r#niod1foy"
+        Expect.isError x "Parsing should have returned an error"
+        let msg = match x with Error y -> y | _ -> ""
+        Expect.equal msg """string was not in base-36 format ("cjld2*yuq0/00t3r#niod1foy")"""
+          "Expected error message not returned"
+        }
       test "succeeds" {
-        let x = Cuid.fromString "cjld2cyuq0000t3rmniod1foy"
+        let x = Cuid.ofString "cjld2cyuq0000t3rmniod1foy"
         Expect.isOk x "Parsing should have returned Ok"
         let cuid = match x with Ok y -> y | _ -> Cuid ""
         Expect.equal cuid (Cuid "cjld2cyuq0000t3rmniod1foy") "CUID value not correct"
@@ -50,6 +57,30 @@ module CuidTests =
       test "succeeds" {
         let cuidString = (Cuid >> Cuid.toString) "abc123"
         Expect.equal cuidString "abc123" "The CUID string should have been the string value of the CUID"
+        }
+      ]
+  
+  [<Tests>]
+  let isValidTests =
+    testList "Cuid.isValid" [
+      test "succeeds when the string is a valid CUID" {
+        Expect.isTrue ((Cuid.generateString >> Cuid.isValid) ()) "A valid CUID should have returned true"
+        }
+      test "succeeds when the string is not a valid CUID" {
+        Expect.isFalse (Cuid.isValid "abc") "An invalid CUID should have returned false"
+        }
+      ]
+  
+  [<Tests>]
+  let validationMessageTests =
+    testList "Cuid.validationMessage" [
+      test "succeeds when the string is a valid CUID" {
+        Expect.equal ((Cuid.generateString >> Cuid.validationMessage) ()) ""
+          "A valid CUID should have returned an empty validation message"
+        }
+      test "succeeds when the string is an invalid CUID" {
+        Expect.equal (Cuid.validationMessage null) "string was null"
+          "An invalid CUID should have returned its validation error message"
         }
       ]
   
@@ -77,28 +108,34 @@ module SlugTests =
       ]
   
   [<Tests>]
-  let fromStringTests =
-    testList "Slug.fromString" [
+  let ofStringTests =
+    testList "Slug.ofString" [
       test "fails when string is null" {
-        let x = Slug.fromString null
+        let x = Slug.ofString null
         Expect.isError x "Parsing should have returned an error"
         let msg = match x with Error y -> y | _ -> ""
         Expect.equal msg "string was null" "Expected error message not returned"
         }
       test "fails when string is less than 7 characters" {
-        let x = Slug.fromString "12345"
+        let x = Slug.ofString "12345"
         Expect.isError x "Parsing should have returned an error"
         let msg = match x with Error y -> y | _ -> ""
         Expect.equal msg "string must be at least 7 characters (length 5)" "Expected error message not returned"
         }
       test "fails when string is more than 10 characters" {
-        let x = Slug.fromString "abcdefghijklmnop"
+        let x = Slug.ofString "abcdefghijklmnop"
         Expect.isError x "Parsing should have returned an error"
         let msg = match x with Error y -> y | _ -> ""
         Expect.equal msg "string must not exceed 10 characters (length 16)" "Expected error message not returned"
         }
+      test "fails when string is not valid base-36" {
+        let x = Slug.ofString "cj*q0/0#d"
+        Expect.isError x "Parsing should have returned an error"
+        let msg = match x with Error y -> y | _ -> ""
+        Expect.equal msg """string was not in base-36 format ("cj*q0/0#d")""" "Expected error message not returned"
+        }
       test "succeeds" {
-        let x = Slug.fromString "cyuq0000t"
+        let x = Slug.ofString "cyuq0000t"
         Expect.isOk x "Parsing should have returned Ok"
         let slug = match x with Ok y -> y | _ -> Slug ""
         Expect.equal slug (Slug "cyuq0000t") "Slug value not correct"
@@ -111,6 +148,30 @@ module SlugTests =
       test "Create a string from a Slug" {
         let slugString = (Slug >> Slug.toString) "5551234"
         Expect.equal slugString "5551234" "The Slug string should have been the string value of the Slug"
+        }
+      ]
+  
+  [<Tests>]
+  let isValidTests =
+    testList "Slug.isValid" [
+      test "succeeds when the string is a valid Slug" {
+        Expect.isTrue ((Slug.generateString >> Slug.isValid) ()) "A valid Slug should have returned true"
+        }
+      test "succeeds when the string is not a valid Slug" {
+        Expect.isFalse (Slug.isValid "12345") "An invalid Slug should have returned false"
+        }
+      ]
+  
+  [<Tests>]
+  let validationMessageTests =
+    testList "Slug.validationMessage" [
+      test "succeeds when the string is a valid Slug" {
+        Expect.equal ((Slug.generateString >> Slug.validationMessage) ()) ""
+          "A valid Slug should have returned an empty validation message"
+        }
+      test "succeeds when the string is an invalid Slug" {
+        Expect.equal (Slug.validationMessage null) "string was null"
+          "An invalid Slug should have returned its validation error message"
         }
       ]
   
