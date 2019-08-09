@@ -1,4 +1,4 @@
-# FunctionalCuid
+# FunctionalCuid [![Build status](https://ci.appveyor.com/api/projects/status/ewxy14onio0grhs1?svg=true)](https://ci.appveyor.com/project/danieljsummers/functionalcuid)
 
 `FunctionalCuid` is a CUID generator written in and designed for F#, which can be used from any .NET language.
 

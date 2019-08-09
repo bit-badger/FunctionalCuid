@@ -4,15 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <VersionPrefix>1.0.0</VersionPrefix>
     <PackageReleaseNotes>Initial release</PackageReleaseNotes>
-    <Authors>danieljsummers</Authors>
+    <Authors>bit-badger; danieljsummers</Authors>
     <Company>Bit Badger Solutions</Company>
-    <PackageProjectUrl>https://github.com/danieljsummers/FunctionalCuid</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/bit-badger/FunctionalCuid</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <RepositoryUrl>https://github.com/danieljsummers/FunctionalCuid</RepositoryUrl>
+    <RepositoryUrl>https://github.com/bit-badger/FunctionalCuid</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <Copyright>MIT License</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageTags>Cuid Slug F-Sharp</PackageTags>
+    <PackageTags>Cuid Slug F# FSharp</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Library.fs" />
